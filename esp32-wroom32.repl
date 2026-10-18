@@ -1,0 +1,31 @@
+/**********************************************/ 
+/*                    CPU                     */
+/**********************************************/ 
+
+// Here we need to have a supported tlib implementation
+// for ESP32 before designing the C# cpu model
+cpu: CPU.Xtensa @ sysbus
+    cpuType: "???"
+    frequency: ???
+    ...
+
+/**********************************************/ 
+/*                   MEMORY                   */
+/**********************************************/ 
+
+// 448KB Internal ROM
+rom: Memory.MappedMemory @ {
+	
+	}
+	size: 0x70000
+
+// 520KB Internal ROM
+sram: Memory.MappedMemory @ {
+	
+}
+
+// 8KB RTC Fast & Slow
+rtc: Memory.MappedMemory @ {
+	
+}
+	
