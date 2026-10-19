@@ -2,30 +2,64 @@
 /*                    CPU                     */
 /**********************************************/ 
 
-// Here we need to have a supported tlib implementation
-// for ESP32 before designing the C# cpu model
-cpu: CPU.Xtensa @ sysbus
-    cpuType: "???"
-    frequency: ???
-    ...
+cpu0: CPU.Xtensa @ sysbus
+    cpuType: "esp"
+    
+cpu1: CPU.Xtensa @ sysbus
+    cpuType: "esp"
+
+gic:
+	<TODO>
 
 /**********************************************/ 
 /*                   MEMORY                   */
 /**********************************************/ 
 
-// 448KB Internal ROM
-rom: Memory.MappedMemory @ {
-	
-	}
-	size: 0x70000
 
-// 520KB Internal ROM
-sram: Memory.MappedMemory @ {
-	
-}
+// 384KB Internal ROM0 (0x4000_0000 - 0x4005_FFFF)
+rom0: Memory.MappedMemory @ sysbus 0x40000000
+	size: 0x60000
 
-// 8KB RTC Fast & Slow
-rtc: Memory.MappedMemory @ {
-	
-}
-	
+// 64KB (0x3FF9_0000 - 0x3FF9_FFFF)
+rom1: Memory.MappedMemory @ sysbus 0x3FF90000
+	size: 0x10000
+
+// 192KB Internal SRAM0 (0x4007_0000 - 0x4007_FFFF)
+sram0: Memory.MappedMemory @ sysbus 0x40070000
+	size: 0x10000
+
+/*
+ * Here, both ranges must map to the same data.
+ * (see esp32 trm, section 3.3.2.4)
+ */
+// 128KB Internal SRAM1 (0x3FFE_0000 - 0x3FFF_FFFF)
+//                      (0x400A_0000 - 0x400B_FFFF)
+sram1: Memory.MappedMemory @ {
+		sysbus 0x3FFE0000;
+		sysbus 0x3FFE0000
+ 	}
+	size: 0x20000
+
+// 200KB Internal SRAM2 (0x3FFA_E000 - 0x3FFD_FFFF)
+sram2: Memory.MappedMemory @ sysbus 0x3FFAE000
+	size: 0x32000
+
+// /*
+//  * For now, no ULP usage
+// */
+// 8KB RTC SLOW
+// rtc_slow: Memory.MappedMemory @ sysbus 0x50000000
+// 	size: 0x2000
+// 
+// rtc_fast: Memory.MappedMemory @ sysbus 
+// 	size: 0x10000
+
+// /*
+//  * For now, no DMA
+//  */
+// dma: DMA.ESP32DMA @ sysbus
+//  <TODO>
+
+/**********************************************/ 
+/*                PERIPHERALS                 */
+/**********************************************/ 
