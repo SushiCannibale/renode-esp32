@@ -4,11 +4,11 @@
 
 // Xtensa 32-bits LX6 240MHz 
 cpu0: CPU.Xtensa @ sysbus
-    cpuType: "esp"
+    cpuType: "esp32"
     cpuId: 0x00
     
 cpu1: CPU.Xtensa @ sysbus
-    cpuType: "esp"
+    cpuType: "esp32"
     cpuId: 0x01
 
 // gic:
@@ -38,7 +38,7 @@ sram0: Memory.MappedMemory @ sysbus 0x40070000
 //                      (0x400A_0000 - 0x400B_FFFF)
 sram1: Memory.MappedMemory @ {
         sysbus 0x3FFE0000;
-        sysbus 0x3FFE0000
+        sysbus 0x400A0000
     }
     size: 0x20000
 
