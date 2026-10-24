@@ -2,11 +2,14 @@
 /*                    CPU                     */
 /**********************************************/ 
 
+// Xtensa 32-bits LX6 240MHz 
 cpu0: CPU.Xtensa @ sysbus
     cpuType: "esp"
+    id: 0
     
 cpu1: CPU.Xtensa @ sysbus
     cpuType: "esp"
+    id: 1
 
 gic:
 	<TODO>
@@ -60,6 +63,14 @@ sram2: Memory.MappedMemory @ sysbus 0x3FFAE000
 // dma: DMA.ESP32DMA @ sysbus
 //  <TODO>
 
+// 4MB external SPI Flash
+// (ESP32 TRM specifies:
+// - 4MB r/ @ 0x3F40_0000 - 0x3F7F_FFFF
+// - 4MB r/w @ 0x3F80_0000 - 0x3FBF_FFFF
+flash: Memory.MemoryMapped @ sysbus 0x3F800000
+	size: 0x400000
+
 /**********************************************/ 
 /*                PERIPHERALS                 */
 /**********************************************/ 
+
