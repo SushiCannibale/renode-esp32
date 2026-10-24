@@ -2,9 +2,8 @@
 :desc: This script tests the UART interface for ESP32-WROOM32 emulated platform
 
 $name?="esp32-wroom32"
-$ns=@epita/
-$repl=$ns/$name.repl
-$bin=$ns/bin.elf
+$repl=@epita/esp32-wroom32.repl
+$bin=@epita/bin.elf
 
 mach create $name
 machine LoadPlatformDescription $repl
