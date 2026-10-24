@@ -16,6 +16,7 @@ podman build -t renode .
 
 podman run \
 	--name renode \
+	-v epita:/opt/renode/epita:ro
 	--rm \
 	-it renode
 ```
