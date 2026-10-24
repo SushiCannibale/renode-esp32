@@ -74,3 +74,15 @@ flash: Memory.MemoryMapped @ sysbus 0x3F800000
 /*                PERIPHERALS                 */
 /**********************************************/ 
 
+// UART0 (0x3FF4_0000 - 0x3FF4_0FFF)
+uart0: UART.ESP32_UART @ sysbus <0x3FF40000, 0x1000>
+
+// // I2C (0x3FF5_3000 - 0x3FF5_3FFF)
+// i2c0: ? @ sysbus
+// 
+// // I2C1 (0x3FF6_7000 - 0x3FF6_7FFF)
+// // i2c1: 
+// 
+// wifi:
+// 
+// gpios:
