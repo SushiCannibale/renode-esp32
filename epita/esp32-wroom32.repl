@@ -3,11 +3,12 @@
 /**********************************************/ 
 
 // Xtensa 32-bits LX6 240MHz 
-cpu0: CPU.Xtensa @ sysbus
+app_cpu: CPU.Xtensa @ sysbus
     cpuType: "esp32"
     cpuId: 0x00
-    
-cpu1: CPU.Xtensa @ sysbus
+
+// Xtensa 32-bits LX6 240MHz    
+pro_cpu: CPU.Xtensa @ sysbus
     cpuType: "esp32"
     cpuId: 0x01
 
@@ -18,56 +19,52 @@ cpu1: CPU.Xtensa @ sysbus
 /*                   MEMORY                   */
 /**********************************************/ 
 
+/* ================== ROM =================== */
+
 // 384KB Internal ROM0 (0x4000_0000 - 0x4005_FFFF)
-rom0: Memory.MappedMemory @ sysbus 0x40000000
+rom0_irom: Memory.MappedMemory @ sysbus 0x40000000
     size: 0x60000
 
 // 64KB (0x3FF9_0000 - 0x3FF9_FFFF)
-rom1: Memory.MappedMemory @ sysbus 0x3FF90000
+rom1_drom: Memory.MappedMemory @ sysbus 0x3FF90000
     size: 0x10000
 
-// 192KB Internal SRAM0 (0x4007_0000 - 0x4007_FFFF)
-sram0: Memory.MappedMemory @ sysbus 0x40070000
-    size: 0x10000
+/* ================== SRAM ================== */
 
-/*
- * Here, both ranges must map to the same data.
- * (see esp32 trm, section 3.3.2.4)
- */
-// 128KB Internal SRAM1 (0x3FFE_0000 - 0x3FFF_FFFF)
-//                      (0x400A_0000 - 0x400B_FFFF)
-sram1: Memory.MappedMemory @ {
-        sysbus 0x3FFE0000;
-        sysbus 0x400A0000
-    }
+// 192KB SRAM (0x4007_0000 - 0x4009_FFFF)
+sram0_iram: Memory.MappedMemory @ sysbus 0x40070000
+    size: 0x30000
+
+// 128KB SRAM (0x3FFE_0000 - 0x3FFF_FFFF) (data bus)
+//            (0x400A_0000 - 0x400B_FFFF) (instruction bus)
+sram1_dram: Memory.MappedMemory @ sysbus 0x3FFE0000
+    size: 0x20000
+sram1_iram: Memory.MappedMemory @ sysbus 0x400A0000
     size: 0x20000
 
-// 200KB Internal SRAM2 (0x3FFA_E000 - 0x3FFD_FFFF)
-sram2: Memory.MappedMemory @ sysbus 0x3FFAE000
+// 200KB SRAM (0x3FFA_E000 - 0x3FFD_FFFF)
+sram2_dram: Memory.MappedMemory @ sysbus 0x3FFAE000
     size: 0x32000
 
-// /*
-//  * For now, no ULP usage
-// */
-// 8KB RTC SLOW
-// rtc_slow: Memory.MappedMemory @ sysbus 0x50000000
+/* RTC FAST is already mapped inside the IRAM or DRAM. */
+// 8KB RTC Fast
+// rtc_fast: Memory.MappedMemory @ {
+//         sysbus @ 0x400C0000; // IRAM View (executable)
+//         sysbus @ 0x3FF80000; // DRAM View (data access)
+//     }
 //     size: 0x2000
-// 
-// rtc_fast: Memory.MappedMemory @ sysbus 
-//     size: 0x10000
 
-// /*
-//  * For now, no DMA
-//  */
-// dma: DMA.ESP32DMA @ sysbus
-//     <TODO>
+// 8KB RTC Fast (0x5000_0000 - 0x5000_1FFF)
+rtc_slow: Memory.MappedMemory @ sysbus 0x50000000
+    size: 0x2000
 
-// 4MB external SPI Flash
-// (ESP32 TRM specifies:
-// - 4MB r/ @ 0x3F40_0000 - 0x3F7F_FFFF
-// - 4MB r/w @ 0x3F80_0000 - 0x3FBF_FFFF
-flash: Memory.MappedMemory @ sysbus 0x3F800000
+// Specific to WROOM32 model
+// - 4MB     SPI Flash (0x3F40_0000 - 0x3F7F_FFFF) (data)
+// - 11512KB SPI Flash (0x400C_2000 - 0x40BF_FFFF) (instruction)
+dflash: Memory.MappedMemory @ sysbus 0x3F400000
     size: 0x400000
+iflash: Memory.MappedMemory @ sysbus 0x400C2000
+    size: 0xb3e000
 
 /**********************************************/ 
 /*                PERIPHERALS                 */
