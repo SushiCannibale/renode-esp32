@@ -3,7 +3,7 @@
 
 $name?="esp32-wroom32"
 $repl=@epita/esp32-wroom32.repl
-$bin=@epita/bin.elf
+$bin=@epita/hello_world.elf
 
 mach create $name
 machine LoadPlatformDescription $repl
